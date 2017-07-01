@@ -1,53 +1,43 @@
 package notes
 
 import (
-	"testing"
+	"errors"
+	"strings"
 )
 
-func TestNotesAreTransposedOk(t *testing.T) {
-	tests := []struct {
-		n string
-		t int
-		e string
-	}{
-		{n: "A", t: 1, e: "A#"},
-		{n: "A", t: 2, e: "B"},
-		{n: "A", t: 12, e: "A"},
-		{n: "Am", t: 3, e: "Cm"},
-		{n: "Bm", t: 4, e: "D#m"},
-		{n: "C#m", t: 5, e: "F#m"},
-		{n: "C#7", t: 5, e: "F#7"},
-		{n: "D7", t: 7, e: "A7"},
-		{n: "Em7", t: 8, e: "Cm7"},
-		{n: "F5", t: 9, e: "D5"},
+var allNotes = [12]string{"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"}
+
+var allSuffixes = [4]string{"m7", "7", "5", "m"}
+
+func Transpose(n string, t int) (string, error) {
+	var note, suffix string = split(n)
+
+	var i int = index(note)
+	if i == -1 {
+		return "", errors.New("Non existent note")
 	}
 
-	for _, test := range tests {
-		result, err := Transpose(test.n, test.t)
+	note = allNotes[(i+t)%12]
+	note += suffix
 
-    if err != nil {
-      t.Errorf("%v %d: should not return error", test.n, test.t)
-    }
+	return note, nil
+}
 
-		if result != test.e {
-			t.Errorf("%v %d: %v was not equal to %v", test.n, test.t, result, test.e)
+func index(n string) int {
+	for i, v := range allNotes {
+		if n == v {
+			return i
 		}
 	}
+	return -1
 }
 
-func TestWrongNoteReturnsError(t *testing.T) {
-  result, err := Transpose("X", 1)
-  if result != "" {
-    t.Errorf("got %v, but should return an empty string", result)
-  }
-
-  if err == nil {
-    t.Errorf("got %v, but should return an error", err)
-  }
-}
-
-func BenchmarkTranspose(b *testing.B) {
-  for i := 0; i < b.N; i++ {
-		Transpose("A#m7", 12)
+func split(n string) (string, string) {
+	for _, s := range allSuffixes {
+		if strings.HasSuffix(n, s) {
+			p := strings.TrimSuffix(n, s)
+			return p, s
+		}
 	}
+	return n, ""
 }
