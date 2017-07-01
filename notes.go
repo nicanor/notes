@@ -6,11 +6,14 @@ import (
 	"strings"
 )
 
-var allNotes = [12]string{"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"}
+var allNotes = [24]string{"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#",
+	"La", "La#", "Si", "Do", "Do#", "Re", "Re#", "Mi", "Fa", "Fa#", "Sol", "Sol#"}
+
 var allSuffixes = [4]string{"m7", "7", "5", "m"}
 
 // Transpose returns a new note, given a note and a number of semitones.
 func Transpose(n string, t int) (string, error) {
+	var latin bool
 	var note, suffix string = split(n)
 	var i int = index(note)
 
@@ -18,18 +21,28 @@ func Transpose(n string, t int) (string, error) {
 		return "", errors.New("Non existent note")
 	}
 
-	note = get(i + t)
+	if i > 11 {
+		latin = true
+	}
+
+	note = get(i + t, latin)
 
 	return note + suffix, nil
 }
 
 // get returns note by position in allNotes. If negative index, it goes backwards.
-func get(i int) string {
+func get(i int, latin bool) string {
 	if i < 0 {
-		i = 12 - (-i % 12)
+		i = 12 + (i % 12)
 	}
 
-	return allNotes[i%12]
+	i %= 12
+
+	if latin {
+		i += 12
+	}
+
+	return allNotes[i]
 }
 
 // index returns position of note in allNotes.

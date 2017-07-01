@@ -22,6 +22,8 @@ func TestNotesAreTransposedOk(t *testing.T) {
 		{n: "Em7", t: 8, e: "Cm7"},
 		{n: "F5", t: 9, e: "D5"},
 		{n: "A", t: -1, e: "G#"},
+		{n: "La", t: 2, e: "Si"},
+		{n: "Solm7", t: -100, e: "Re#m7"},
 	}
 
 	for _, test := range tests {
