@@ -19,7 +19,7 @@ func TestNotesAreTransposedOk(t *testing.T) {
 		{n: "C#7", t: 5, e: "F#7"},
 		{n: "D7", t: 7, e: "A7"},
 		{n: "Em7", t: 8, e: "Cm7"},
-//		{n: "A5", t: 8, e: "C5"},
+		{n: "F5", t: 9, e: "D5"},
 	}
 
 	for _, test := range tests {
@@ -44,4 +44,10 @@ func TestWrongNoteReturnsError(t *testing.T) {
   if err == nil {
     t.Errorf("got %v, but should return an error", err)
   }
+}
+
+func BenchmarkTranspose(b *testing.B) {
+  for i := 0; i < b.N; i++ {
+		Transpose("A#m7", 12)
+	}
 }
