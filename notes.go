@@ -9,6 +9,7 @@ import (
 var allNotes = [12]string{"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"}
 var allSuffixes = [4]string{"m7", "7", "5", "m"}
 
+// Transpose returns a new note, given a note and a number of semitones.
 func Transpose(n string, t int) (string, error) {
 	var note, suffix string = split(n)
 
@@ -17,7 +18,13 @@ func Transpose(n string, t int) (string, error) {
 		return "", errors.New("Non existent note")
 	}
 
-	note = allNotes[(i+t)%12]
+	i += t
+
+	if i < 0 {
+		i = 12 - (-i%12) 
+	}
+
+	note = allNotes[i%12]
 	note += suffix
 
 	return note, nil

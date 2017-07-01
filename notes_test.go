@@ -1,6 +1,7 @@
 package notes
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -20,6 +21,7 @@ func TestNotesAreTransposedOk(t *testing.T) {
 		{n: "D7", t: 7, e: "A7"},
 		{n: "Em7", t: 8, e: "Cm7"},
 		{n: "F5", t: 9, e: "D5"},
+		{n: "A", t: -1, e: "G#"},
 	}
 
 	for _, test := range tests {
@@ -50,4 +52,10 @@ func BenchmarkTranspose(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		Transpose("A#m7", 12)
 	}
+}
+
+func ExampleTranspositons() {
+	n, _ := Transpose("A#m7", 5)
+	fmt.Println(n)
+	// Output: D#m7
 }
