@@ -1,3 +1,4 @@
+// Package notes transposes musical notes.
 package notes
 
 import (
@@ -6,7 +7,6 @@ import (
 )
 
 var allNotes = [12]string{"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"}
-
 var allSuffixes = [4]string{"m7", "7", "5", "m"}
 
 func Transpose(n string, t int) (string, error) {
