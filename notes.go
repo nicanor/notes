@@ -12,24 +12,27 @@ var allSuffixes = [4]string{"m7", "7", "5", "m"}
 // Transpose returns a new note, given a note and a number of semitones.
 func Transpose(n string, t int) (string, error) {
 	var note, suffix string = split(n)
-
 	var i int = index(note)
+
 	if i == -1 {
 		return "", errors.New("Non existent note")
 	}
 
-	i += t
+	note = get(i + t)
 
-	if i < 0 {
-		i = 12 - (-i%12) 
-	}
-
-	note = allNotes[i%12]
-	note += suffix
-
-	return note, nil
+	return note + suffix, nil
 }
 
+// get returns note by position in allNotes. If negative index, it goes backwards.
+func get(i int) string {
+	if i < 0 {
+		i = 12 - (-i % 12)
+	}
+
+	return allNotes[i%12]
+}
+
+// index returns position of note in allNotes.
 func index(n string) int {
 	for i, v := range allNotes {
 		if n == v {
@@ -39,6 +42,7 @@ func index(n string) int {
 	return -1
 }
 
+// split separates prefix from suffix.
 func split(n string) (string, string) {
 	for _, s := range allSuffixes {
 		if strings.HasSuffix(n, s) {
